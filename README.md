@@ -1,8 +1,8 @@
 # Classroom Survey
 
-A mobile-friendly web app for quick in-class surveys. Instructors prepare a survey, show a QR code, and students answer from their phones. No student account is required.
+A mobile-friendly web app for quick in-class surveys. An instructor prepares a survey, shows a QR code, and students answer from their phones. Students do not create accounts.
 
-The app includes instructor login, survey editing, QR presentation, anonymous student submission, results, and CSV export. Phase 16 enhancements are not included.
+The live site is [https://classroom-survey.eshisrivastava93.workers.dev](https://classroom-survey.eshisrivastava93.workers.dev).
 
 The assignment documents in this folder are the source of truth:
 
@@ -12,10 +12,13 @@ The assignment documents in this folder are the source of truth:
 - `API.md`
 - `UI.md`
 
+`DEVELOPMENT_SUMMARY.md` and `AI_DEVELOPMENT_HISTORY.md` describe how the app was built. Phase 16 is not part of this version.
+
 ## Requirements
 
 - Node.js 22 or newer
 - npm
+- A Supabase project with one instructor user
 
 ## Setup
 
@@ -24,14 +27,29 @@ npm install
 cp .env.example .env.local
 ```
 
-`.env.local` is ignored by git. Leave the two values empty until you create a Supabase project in Phase 2. The landing page does not need them.
+`.env.local` is ignored by git. Put the project URL and the public anon key in it. Vite reads those values when the app starts or when it builds. They are not secret in the way a service-role key is, but they still should not be committed.
 
 | Variable | Purpose |
 | --- | --- |
 | `VITE_SUPABASE_URL` | The Supabase project URL |
 | `VITE_SUPABASE_ANON_KEY` | The public anon key |
 
-Use only the anon key in this app. Do not put the Supabase `service_role` key in any frontend environment variable. That key bypasses database security rules.
+Use only the anon key in this app. Do not put the Supabase `service_role` key in `.env.local`, in GitHub, or in Cloudflare. That key bypasses the database rules.
+
+## Database
+
+Apply the schema once, in the Supabase SQL Editor, as the database owner:
+
+1. Open `supabase/migrations/20261106020000_initial_schema.sql`.
+2. Paste the whole file into a new query and run it.
+3. In **Authentication → Sign In / Providers**, turn off public sign-up.
+4. Create one instructor user and confirm the email if Supabase asks.
+
+Any signed-in user can read and change every survey, because the policies treat every authenticated user as the instructor. Public sign-up has to stay off.
+
+The migration creates `surveys`, `questions`, `choices`, `responses`, and `answers`, plus the functions `activate_survey`, `close_survey`, `get_public_survey_status`, and `submit_survey_response`. No later migration is required.
+
+`supabase/verify_phase2.sql` is a separate check. It inserts sample rows, prints 22 results, and rolls back. It does not replace the migration.
 
 ## Run the app
 
@@ -52,16 +70,34 @@ npm run format       # rewrite files with Prettier
 npm run format:check # check formatting without rewriting
 ```
 
-## What is included
+## Routes
 
-- `/` is the landing page, with an Instructor Login button.
-- `/login` signs the instructor in with Supabase Auth. `/dashboard`, `/surveys/new`, `/surveys/:id/edit`, `/surveys/:id/present`, and `/surveys/:id/results` require that session.
-- `/s/:slug` is the public student page. Students do not sign in.
-- Survey content and responses are stored in Supabase. The browser stores only an anonymous submission token.
-- `src/lib/supabase.ts` reads `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`. It does not contain keys.
+| Path | Who can open it |
+| --- | --- |
+| `/` | Anyone. Landing page with Instructor Login. |
+| `/login` | Anyone. Supabase email and password sign-in. |
+| `/dashboard` | Signed-in instructor. |
+| `/surveys/new` and `/surveys/:id/edit` | Signed-in instructor. |
+| `/surveys/:id/present` | Signed-in instructor. QR code and public URL. |
+| `/surveys/:id/results` | Signed-in instructor. Counts, charts, and CSV. |
+| `/s/:slug` | Anyone. The student page. The slug is not the survey id. |
 
-## Manual steps still required
+`src/lib/supabase.ts` creates the client from the two environment variables. Survey rows and responses live in Supabase. The browser stores only an anonymous submission token in `localStorage`.
 
-1. Apply `supabase/migrations/20261106020000_initial_schema.sql` in the Supabase SQL editor if it is not already applied. No further migration is required for this version.
-2. Turn off public sign-up, create one instructor user, and paste the project URL and anon key into `.env.local`.
-3. Create a Cloudflare Pages site when you are ready to deploy. The build command is `npm run build` and the output directory is `dist`.
+## Deployment
+
+The source is on GitHub at [https://github.com/eshi999/classroom-survey](https://github.com/eshi999/classroom-survey).
+
+The specification names Cloudflare Pages. The site that is actually online is a Cloudflare Worker at the URL above. This repository does not contain `wrangler.toml` or a Pages `_redirects` file. The Worker is already set up so `/login`, `/dashboard`, `/s/:slug`, and unknown paths return `index.html`. The React router takes over after that.
+
+To publish a new version:
+
+1. Put `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in the environment used for the build. Vite copies them into the JavaScript bundle. A value added only after `npm run build` does not reach the site.
+2. Run `npm run build`.
+3. Deploy the `dist` directory to the same Worker, and keep the single-page fallback that serves `index.html` for client-side routes.
+
+Do not deploy the service-role key.
+
+## What is not verified yet
+
+Instructor login works on the live site. These checks have not been completed: creating and presenting a survey in production, a real student submission, the duplicate-submission screen, results, a CSV opened in a spreadsheet, and a QR code whose link uses the production host. `TODO.md` leaves those boxes unchecked.

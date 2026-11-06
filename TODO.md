@@ -111,7 +111,7 @@ This roadmap breaks the implementation into small, testable phases ordered from 
 
 # Phase 7 — Student Survey Page
 
-- [ ] Create the public route `/s/:surveyId`.
+- [x] Create the public route `/s/:surveyId`.
 - [ ] Load the requested active survey.
 - [x] Show an error if the survey does not exist.
 - [ ] Show a message if the survey is closed.
@@ -200,7 +200,7 @@ This roadmap breaks the implementation into small, testable phases ordered from 
 
 # Phase 14 — Testing
 
-- [ ] Test instructor login.
+- [x] Test instructor login.
 - [ ] Test survey creation.
 - [ ] Test survey editing.
 - [ ] Test activation.
@@ -212,20 +212,20 @@ This roadmap breaks the implementation into small, testable phases ordered from 
 - [ ] Test CSV export.
 - [ ] Test mobile layout.
 - [ ] Test with at least two browsers.
-- [ ] Test unauthorized access attempts.
-- [ ] Test database Row Level Security.
+- [x] Test unauthorized access attempts.
+- [x] Test database Row Level Security.
 
 ---
 
 # Phase 15 — Deployment
 
-- [ ] Push the project to GitHub.
+- [x] Push the project to GitHub.
 - [ ] Create the Cloudflare Pages site.
 - [ ] Connect Cloudflare Pages to the GitHub repository.
-- [ ] Configure production environment variables.
-- [ ] Deploy the application.
-- [ ] Configure SPA routing.
-- [ ] Verify production login.
+- [x] Configure production environment variables.
+- [x] Deploy the application.
+- [x] Configure SPA routing.
+- [x] Verify production login.
 - [ ] Verify QR codes point to the production URL.
 - [ ] Test student submissions in production.
 - [ ] Test instructor results in production.
