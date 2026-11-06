@@ -44,12 +44,12 @@ This roadmap breaks the implementation into small, testable phases ordered from 
 
 # Phase 3 — Instructor Authentication
 
-- [ ] Create the instructor login page.
-- [ ] Connect login to Supabase Auth.
+- [x] Create the instructor login page.
+- [x] Connect login to Supabase Auth.
 - [ ] Add logout.
-- [ ] Create an authentication context/provider.
-- [ ] Create a protected-route component.
-- [ ] Redirect unauthenticated users to login.
+- [x] Create an authentication context/provider.
+- [x] Create a protected-route component.
+- [x] Redirect unauthenticated users to login.
 - [ ] Show the logged-in instructor in the dashboard.
 
 ---
@@ -113,7 +113,7 @@ This roadmap breaks the implementation into small, testable phases ordered from 
 
 - [ ] Create the public route `/s/:surveyId`.
 - [ ] Load the requested active survey.
-- [ ] Show an error if the survey does not exist.
+- [x] Show an error if the survey does not exist.
 - [ ] Show a message if the survey is closed.
 - [ ] Render survey title and description.
 - [ ] Render Multiple Choice questions.
@@ -133,7 +133,7 @@ This roadmap breaks the implementation into small, testable phases ordered from 
 - [ ] Save the token with each response.
 - [ ] Prevent the same token from submitting twice to the same survey.
 - [ ] Show a friendly message if a duplicate submission is attempted.
-- [ ] Add a database uniqueness constraint if appropriate.
+- [x] Add a database uniqueness constraint if appropriate.
 
 ---
 
@@ -168,7 +168,7 @@ This roadmap breaks the implementation into small, testable phases ordered from 
 - [ ] Export one row per response.
 - [ ] Include submission timestamp.
 - [ ] Include each question and answer.
-- [ ] Create safe CSV escaping.
+- [x] Create safe CSV escaping.
 - [ ] Test export with spreadsheet applications.
 
 ---
@@ -188,9 +188,9 @@ This roadmap breaks the implementation into small, testable phases ordered from 
 
 - [ ] Add consistent page layouts.
 - [ ] Improve mobile responsiveness.
-- [ ] Add loading states.
+- [x] Add loading states.
 - [ ] Add empty states.
-- [ ] Add error messages.
+- [x] Add error messages.
 - [ ] Add confirmation dialogs for destructive actions.
 - [ ] Improve QR-code presentation for classroom projection.
 - [ ] Test accessibility and keyboard navigation.

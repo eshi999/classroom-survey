@@ -2,7 +2,7 @@
 
 A mobile-friendly web app for quick in-class surveys. Instructors prepare a survey, show a QR code, and students answer from their phones. No student account is required.
 
-This repository currently contains **Phase 1 only**: the React app shell, a landing page, and placeholder routes. Login, the database, and survey features are later phases.
+The app includes instructor login, survey editing, QR presentation, anonymous student submission, results, and CSV export. Phase 16 enhancements are not included.
 
 The assignment documents in this folder are the source of truth:
 
@@ -46,6 +46,7 @@ Other commands:
 ```bash
 npm run build        # typecheck and create the production site in dist/
 npm run preview      # serve the production build locally
+npm test             # unit tests
 npm run lint         # ESLint
 npm run format       # rewrite files with Prettier
 npm run format:check # check formatting without rewriting
@@ -54,13 +55,13 @@ npm run format:check # check formatting without rewriting
 ## What is included
 
 - `/` is the landing page, with an Instructor Login button.
-- `/login`, `/dashboard`, `/surveys/new`, `/surveys/:id/edit`, `/surveys/:id/present`, `/surveys/:id/results`, and `/s/:slug` are placeholders. They do not save data or sign anyone in.
-- `src/lib/supabase.ts` reads the environment variables when a later phase asks for a client. It does not contain keys.
+- `/login` signs the instructor in with Supabase Auth. `/dashboard`, `/surveys/new`, `/surveys/:id/edit`, `/surveys/:id/present`, and `/surveys/:id/results` require that session.
+- `/s/:slug` is the public student page. Students do not sign in.
+- Survey content and responses are stored in Supabase. The browser stores only an anonymous submission token.
+- `src/lib/supabase.ts` reads `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`. It does not contain keys.
 
 ## Manual steps still required
 
-Phase 1 does not need a Supabase, GitHub, or Cloudflare account. Those come in later phases:
-
-1. Create a Supabase project, turn off public sign-up, create one instructor user, and paste the project URL and anon key into `.env.local`.
-2. Create a GitHub repository and push this project when you are ready to deploy.
-3. Create a Cloudflare Pages site from that repository. The build command is `npm run build` and the output directory is `dist`.
+1. Apply `supabase/migrations/20261106020000_initial_schema.sql` in the Supabase SQL editor if it is not already applied. No further migration is required for this version.
+2. Turn off public sign-up, create one instructor user, and paste the project URL and anon key into `.env.local`.
+3. Create a Cloudflare Pages site when you are ready to deploy. The build command is `npm run build` and the output directory is `dist`.

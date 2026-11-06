@@ -1,91 +1,62 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { ProtectedRoute } from './components/ProtectedRoute.tsx'
+import { DashboardPage } from './pages/DashboardPage.tsx'
 import { HomePage } from './pages/HomePage.tsx'
-import { PlaceholderPage } from './pages/PlaceholderPage.tsx'
+import { LoginPage } from './pages/LoginPage.tsx'
+import { NotFoundPage } from './pages/NotFoundPage.tsx'
+import { PresentPage } from './pages/PresentPage.tsx'
+import { ResultsPage } from './pages/ResultsPage.tsx'
+import { StudentSurveyPage } from './pages/StudentSurveyPage.tsx'
+import { SurveyEditorPage } from './pages/SurveyEditorPage.tsx'
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route
-          path="/login"
-          element={
-            <PlaceholderPage
-              title="Instructor login"
-              phase="Phase 3"
-              description="Sign-in is not built yet. This page does not check a password."
-            />
-          }
-        />
+        <Route path="/login" element={<LoginPage />} />
         <Route
           path="/dashboard"
           element={
-            <PlaceholderPage
-              title="Instructor dashboard"
-              phase="Phase 4"
-              description="The survey list will be added in a later phase."
-            />
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
           }
         />
         <Route
           path="/surveys/new"
           element={
-            <PlaceholderPage
-              title="New survey"
-              phase="Phase 5"
-              description="The survey editor will be added in a later phase."
-            />
+            <ProtectedRoute>
+              <SurveyEditorPage />
+            </ProtectedRoute>
           }
         />
         <Route
           path="/surveys/:id/edit"
           element={
-            <PlaceholderPage
-              title="Edit survey"
-              phase="Phase 5"
-              description="Editing a saved survey will be added in a later phase."
-            />
+            <ProtectedRoute>
+              <SurveyEditorPage />
+            </ProtectedRoute>
           }
         />
         <Route
           path="/surveys/:id/present"
           element={
-            <PlaceholderPage
-              title="Present survey"
-              phase="Phase 6"
-              description="The classroom QR code screen will be added in a later phase."
-            />
+            <ProtectedRoute>
+              <PresentPage />
+            </ProtectedRoute>
           }
         />
         <Route
           path="/surveys/:id/results"
           element={
-            <PlaceholderPage
-              title="Survey results"
-              phase="Phase 9"
-              description="Counts, percentages, and charts will be added in a later phase."
-            />
+            <ProtectedRoute>
+              <ResultsPage />
+            </ProtectedRoute>
           }
         />
-        <Route
-          path="/s/:slug"
-          element={
-            <PlaceholderPage
-              title="Student survey"
-              phase="Phase 7"
-              description="The public survey students open from a QR code will be added in a later phase."
-            />
-          }
-        />
-        <Route
-          path="*"
-          element={
-            <PlaceholderPage
-              title="Page not found"
-              description="That address is not part of this app."
-            />
-          }
-        />
+        <Route path="/s/:slug" element={<StudentSurveyPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   )
